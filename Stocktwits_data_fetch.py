@@ -11,11 +11,6 @@ sp500 = pd.read_csv('sp500_04-05-2024.csv', header=0, index_col=0)
 sp500_tickers = sp500['ticker']
 
 #----------------------------------------------------
-
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-}
-
 def fetch_comments(ticker, start_date, end_date, max_retries=5):
     url = f"https://api.stocktwits.com/api/2/streams/symbol/{ticker}.json"
     comments = []
@@ -25,7 +20,7 @@ def fetch_comments(ticker, start_date, end_date, max_retries=5):
         params = {'max': max_id} if max_id else {}
         for attempt in range(max_retries):
             try:
-                response = requests.get(url, headers=headers, params=params)
+                response = requests.get(url, params=params)
                 response.raise_for_status()
                 break
             except requests.exceptions.RequestException as e:
@@ -63,7 +58,7 @@ def fetch_comments(ticker, start_date, end_date, max_retries=5):
     return comments, True
 
 # Define date range
-start_date = datetime(2023, 6, 1)
+start_date = datetime(2024, 1, 1)
 end_date = datetime(2024, 6, 1)
 
 all_comments = pd.read_csv("stocktwits_data.csv")
